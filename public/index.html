@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>tracking.js - face hello world</title>
+  <link rel="stylesheet" href="./stylesheets/demo.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="https://webduino.io/components/webduino-js/dist/webduino-all.min.js"></script>
+  <script src="https://blockly.webduino.io/webduino-blockly.js"></script>
+  <script src="https://blockly.webduino.io/lib/runtime.min.js"></script>
+  <script src="https://blockly.webduino.io/lib/tracking-min.js"></script>
+  <script src="https://blockly.webduino.io/lib/face-min.js"></script>
+
+  <!-- <script src="./javascripts/build/tracking-min.js"></script>
+  <script src="./javascripts/build/data/face-min.js"></script>
+  <script src="./javascripts/build/data/eye-min.js"></script>
+  <script src="./javascripts/build/data/mouth-min.js"></script> -->
+
+  <style>
+    #demo {
+      position: relative;
+      width: 360px;
+      height: 240px;
+    }
+
+    #demo-video {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #vid {
+      max-width: 100%;
+      filter: none;
+    }
+
+    #demo div {
+      position: absolute;
+      z-index: 2;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="demo">
+    <video id="demo-video" preload="" autoplay="" loop="" muted="" controls=""></video>
+
+  </div>
+  <input type="button" value="change" onclick="toGray()" />
+  <video autoplay="true" id="vid" controls="controls" loop="loop">
+    <source src="./images/Bear_OK.ogv" type="video/ogg" />
+    <source src="./images/Bear_OK.mp4" type="video/mp4" />
+  </video>
+  <!-- <iframe width="420" height="315" src="https://www.youtube.com/edit?o=U&ar=2&video_id=Hhmt4BZz_w0">
+  </iframe> -->
+  <svg id='image' version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="blackandwhite">
+        <feColorMatrix values="0.3333 0.3333 0.3333 0 0
+                                     0.3333 0.3333 0.3333 0 0
+                                    0.3333 0.3333 0.3333 0 0
+                                    0      0      0      1 0" />
+      </filter>
+
+    </defs>
+  </svg>
+
+
+
+  <script>
+
+    $(function () {
+      var track = {};
+      var $demo = $('#demo');
+
+      track.myTracker = new tracking.ObjectTracker("face");
+      track.myTracker.setInitialScale(4);
+      track.myTracker.setStepSize(0.5);
+      track.myTracker.setEdgesDensity(0.1);
+
+      track.trackerTask = tracking.track("#demo-video", track.myTracker, {
+        camera: true
+      });
+
+      track.myTracker.on("track", function (event) {
+        if (event.data.length === 0) {
+          toGray();
+          $('#demo div').remove(); //如果沒偵測到人臉，移除所有自動產生的追蹤方框
+
+        } else {
+
+          toInit();
+          $('#demo div').remove();  //一開始搜尋到人臉時，先清空對應的追蹤方框
+          var divLength = event.data.length; //獲取人臉數量
+          event.data.forEach(function (e, i) {
+            if ($('#demo .div' + i).length === 0) {
+              $('#demo').append('<div class="div' + i + '"></div>');  //產生對應的追蹤方框
+            }
+            //設定追蹤方框樣式
+            $('#demo .div' + i).css({
+              'border-width': '3px',
+              'border-style': 'solid',
+              'border-color': '#f00',
+              'left': e.x,
+              'top': e.y,
+              'width': e.width,
+              'height': e.height
+            });
+          });
+        }
+      });
+    });
+    function toGray() {
+      var oDiv = document.getElementById("vid");
+      oDiv.style.filter = 'url(#blackandwhite)'
+    }
+    function toInit() {
+      var oDiv = document.getElementById("vid");
+      oDiv.style.filter = 'none'
+    }
+  </script>
+
+</body>
+
+</html>

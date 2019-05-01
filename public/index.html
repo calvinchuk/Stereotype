@@ -20,8 +20,8 @@
   <style>
     #demo {
       position: relative;
-      width: 360px;
-      height: 240px;
+      width: 600px;
+      height: 400px;
     }
 
     #demo-video {
@@ -34,7 +34,7 @@
     }
 
     #vid {
-      max-width: 100%;
+      width: 100%;
       filter: none;
     }
 
@@ -42,19 +42,26 @@
       position: absolute;
       z-index: 2;
     }
+    #vidiv{
+      position: relative;
+      width: 100%;
+    }
   </style>
 </head>
 
 <body>
+  <div id="vidiv">
+    <video controls autoplay id="vid" loop="loop">
+      <source src="./images/Bear_OK.ogv" type="video/ogg" />
+      <source src="./images/Bear_OK.mp4" type="video/mp4" />
+    </video>
+  </div>
   <div id="demo">
-    <video id="demo-video" preload="" autoplay="" loop="" muted="" controls=""></video>
+    <video id="demo-video" preload="" autoplay="autoplay" loop="" muted=""></video>
 
   </div>
-  <input type="button" value="change" onclick="toGray()" />
-  <video autoplay="true" id="vid" controls="controls" loop="loop">
-    <source src="./images/Bear_OK.ogv" type="video/ogg" />
-    <source src="./images/Bear_OK.mp4" type="video/mp4" />
-  </video>
+
+
   <!-- <iframe width="420" height="315" src="https://www.youtube.com/edit?o=U&ar=2&video_id=Hhmt4BZz_w0">
   </iframe> -->
   <svg id='image' version="1.1" xmlns="http://www.w3.org/2000/svg">

@@ -11,7 +11,7 @@
   <script src="https://blockly.webduino.io/lib/runtime.min.js"></script>
   <script src="https://blockly.webduino.io/lib/tracking-min.js"></script>
   <script src="https://blockly.webduino.io/lib/face-min.js"></script>
-
+  <script src="./javascripts/canvas-video-player.js"></script>
   <!-- <script src="./javascripts/build/tracking-min.js"></script>
   <script src="./javascripts/build/data/face-min.js"></script>
   <script src="./javascripts/build/data/eye-min.js"></script>
@@ -51,11 +51,28 @@
 
 <body>
   <div id="vidiv">
-    <video controls autoplay id="vid" loop="loop">
+    <video controls autoplay="autoplay" id="vid" loop="loop">
       <source src="./images/Bear_OK.ogv" type="video/ogg" />
       <source src="./images/Bear_OK.mp4" type="video/mp4" />
     </video>
+    <canvas class="canvas embed-responsive-item" style="display: none;"></canvas>
   </div>
+  <script>
+      var isIOS = /iPad|iPhone|iPod/.test(navigator.platform);
+      if (isIOS) {
+        var canvasVideo = new CanvasVideoPlayer({
+          videoSelector: '.video',
+          canvasSelector: '.canvas',
+          timelineSelector: false,
+          autoplay: true,
+          makeLoop: true,
+          pauseOnClick: false,
+          audio: false
+        });
+        }else{
+          document.querySelectorAll('.canvas')[0].style.display = 'none';
+      }
+      </script>
   <div id="demo">
     <video controls id="demo-video" preload="" autoplay="autoplay" loop="" muted=""></video>
 

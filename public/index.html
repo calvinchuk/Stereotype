@@ -12,10 +12,6 @@
   <script src="https://blockly.webduino.io/lib/tracking-min.js"></script>
   <script src="https://blockly.webduino.io/lib/face-min.js"></script>
   <script src="./javascripts/canvas-video-player.js"></script>
-  <!-- <script src="./javascripts/build/tracking-min.js"></script>
-  <script src="./javascripts/build/data/face-min.js"></script>
-  <script src="./javascripts/build/data/eye-min.js"></script>
-  <script src="./javascripts/build/data/mouth-min.js"></script> -->
 
   <style>
     #demo {
@@ -42,45 +38,31 @@
       position: absolute;
       z-index: 2;
     }
-    #vidiv{
-      position: relative;
+
+    .embed-responsive {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
       width: 100%;
+      height: 100%;
+      border: 0;
     }
   </style>
 </head>
 
 <body>
-  <div id="vidiv">
-    <video controls autoplay="autoplay" id="vid" loop="loop">
+  <div class="embed-responsive" style="padding-bottom: 28.125%;">
+    <video id="vid" class="embed-responsive-item" autoplay="autoplay" loop="loop">
       <source src="./images/Bear_OK.ogv" type="video/ogg" />
       <source src="./images/Bear_OK.mp4" type="video/mp4" />
     </video>
     <canvas class="canvas embed-responsive-item" style="display: none;"></canvas>
   </div>
-  <script>
-      var isIOS = /iPad|iPhone|iPod/.test(navigator.platform);
-      if (isIOS) {
-        var canvasVideo = new CanvasVideoPlayer({
-          videoSelector: '.video',
-          canvasSelector: '.canvas',
-          timelineSelector: false,
-          autoplay: true,
-          makeLoop: true,
-          pauseOnClick: false,
-          audio: false
-        });
-        }else{
-          document.querySelectorAll('.canvas')[0].style.display = 'none';
-      }
-      </script>
   <div id="demo">
-    <video controls id="demo-video" preload="" autoplay="autoplay" loop="" muted=""></video>
-
+    <video controls preload autoplay loop muted id="demo-video"></video>
   </div>
 
-
-  <!-- <iframe width="420" height="315" src="https://www.youtube.com/edit?o=U&ar=2&video_id=Hhmt4BZz_w0">
-  </iframe> -->
   <svg id='image' version="1.1" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <filter id="blackandwhite">
@@ -89,13 +71,24 @@
                                     0.3333 0.3333 0.3333 0 0
                                     0      0      0      1 0" />
       </filter>
-
     </defs>
   </svg>
 
-
-
   <script>
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.platform);
+    if (isIOS) {
+      var canvasVideo = new CanvasVideoPlayer({
+        videoSelector: '#vid',
+        canvasSelector: '.canvas',
+        timelineSelector: false,
+        autoplay: true,
+        makeLoop: true,
+        pauseOnClick: false,
+        audio: false
+      });
+    } else {
+      document.querySelectorAll('.canvas')[0].style.display = 'none';
+    }
 
     $(function () {
       var track = {};
